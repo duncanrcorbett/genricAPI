@@ -14,9 +14,18 @@ app.get('/',function(req, res){
     res.send('API root');
 });
 
-// GET /allData
+// GET /allData ?completed=true
 app.get('/allData', function (req, res){
-   res.json(dataItems);
+    var queryParams = req.query;
+    var filteredData = dataItems;
+
+    if(queryParams.hasOwnProperty('completed') && queryParams.completed === 'true'){
+        filteredData = _.where(dataItems, {completed: true})
+    } else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false') {
+        filteredData = _.where(dataItems, {completed: false})
+    }
+
+    res.json(filteredData);
 });
 
 // GET /allData/:id                                             // one item
