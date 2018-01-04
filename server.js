@@ -48,6 +48,19 @@ app.post('/allData', function (req,res){
 });
 
 
+// DELETE /allData/:id
+app.delete('/allData/:id', function (req,res){
+    var itemID = parseInt(req.params.id, 10);
+    var matchedItem = _.findWhere(dataItems, {id: itemID});
+
+    if (!matchedItem){
+        res.status(404).json({"error": "no Item found with that ID"});
+    } else {
+        dataItems = _.without(dataItems,matchedItem);
+        res.json(matchedItem);
+    }
+});
+
 app.listen(PORT, function() {
     console.log('Express listening on port '+ PORT );
 });
