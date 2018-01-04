@@ -14,7 +14,7 @@ app.get('/',function(req, res){
     res.send('API root');
 });
 
-// GET /allData ?completed=true
+// GET /allData ?completed=true&q=house
 app.get('/allData', function (req, res){
     var queryParams = req.query;
     var filteredData = dataItems;
@@ -23,6 +23,12 @@ app.get('/allData', function (req, res){
         filteredData = _.where(dataItems, {completed: true})
     } else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false') {
         filteredData = _.where(dataItems, {completed: false})
+    }
+
+    if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0){
+        filteredData = _.filter(filteredData, function(item){
+            return item.description.toLowerCase().indexOf(queryParams.q.toLowerCase()) > -1
+        })
     }
 
     res.json(filteredData);
